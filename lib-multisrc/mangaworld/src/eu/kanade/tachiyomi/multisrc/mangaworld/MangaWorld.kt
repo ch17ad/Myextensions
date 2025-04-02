@@ -36,14 +36,21 @@ abstract class MangaWorld(
 
     companion object {
         protected val CHAPTER_NUMBER_REGEX by lazy { Regex("""(?i)capitolo\s([0-9]+)""") }
-
         protected val DATE_FORMATTER by lazy { SimpleDateFormat("dd MMMM yyyy", Locale.ITALY) }
         protected val DATE_FORMATTER_2 by lazy { SimpleDateFormat("H", Locale.ITALY) }
+    }
+
+    override fun headersBuilder(): Headers.Builder {
+        return Headers.Builder().apply {
+            add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+            add("Referer", baseUrl)
+        }
     }
 
     override fun popularMangaRequest(page: Int): Request {
         return GET("$baseUrl/archive?sort=most_read&page=$page", headers)
     }
+
     override fun latestUpdatesRequest(page: Int): Request {
         return GET("$baseUrl/?page=$page", headers)
     }
